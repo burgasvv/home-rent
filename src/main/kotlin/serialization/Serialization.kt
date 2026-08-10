@@ -11,7 +11,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
@@ -25,22 +25,22 @@ fun Application.configureSerialization() {
                 prettyPrint = true
                 allowSpecialFloatingPointValues = true
                 allowComments = true
-                serializersModule = SerializersModule { contextual(UUID::class, UUIDSerializer) }
+                serializersModule = SerializersModule { contextual(Uuid::class, UUIDSerializer) }
             }
         )
     }
 }
 
-object UUIDSerializer : KSerializer<UUID> {
+object UUIDSerializer : KSerializer<Uuid> {
 
     override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
+        get() = PrimitiveSerialDescriptor("Uuid", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: UUID) {
+    override fun serialize(encoder: Encoder, value: Uuid) {
         encoder.encodeString(value.toString())
     }
 
-    override fun deserialize(decoder: Decoder): UUID {
-        return UUID.fromString(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): Uuid {
+        return Uuid.parse(decoder.decodeString())
     }
 }
