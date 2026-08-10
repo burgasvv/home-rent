@@ -1,3 +1,4 @@
+
 pluginManagement {
     repositories {
         mavenCentral()
@@ -10,6 +11,7 @@ plugins {
 }
 
 dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage")
     repositories {
         mavenCentral()
     }
@@ -19,4 +21,3 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "home-rent"
-

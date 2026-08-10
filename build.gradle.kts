@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(ktorLibs.plugins.ktor)
@@ -12,7 +13,7 @@ application {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 dependencies {
     implementation(ktorLibs.serialization.kotlinx.json)
