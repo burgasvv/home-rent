@@ -3,17 +3,9 @@ package org.burgas.database
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.*
-import org.jetbrains.exposed.v1.core.DatabaseConfig
-import org.jetbrains.exposed.v1.core.ReferenceOption
-import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.*
 import org.jetbrains.exposed.v1.core.dao.id.UuidTable
-import org.jetbrains.exposed.v1.core.greaterEq
-import org.jetbrains.exposed.v1.core.like
-import org.jetbrains.exposed.v1.core.neq
-import org.jetbrains.exposed.v1.core.or
-import org.jetbrains.exposed.v1.core.regexp
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
-import org.jetbrains.exposed.v1.datetime.date
 import org.jetbrains.exposed.v1.datetime.datetime
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
@@ -60,6 +52,7 @@ object VideoTable : UuidTable("video") {
     val data = blob("data")
 }
 
+@Suppress("unused")
 enum class Authority {
     ADMIN, USER
 }
@@ -83,10 +76,12 @@ object IdentityTable : UuidTable("identity") {
     ).uniqueIndex()
 }
 
+@Suppress("unused")
 enum class HomeType {
     APARTMENT, HOUSE, CONDO, TOWNHOUSE, MANOR
 }
 
+@Suppress("unused")
 enum class BillingUnit {
     HOURLY, DAILY, MONTHLY, YEARLY
 }
@@ -161,6 +156,7 @@ object MeetingTable : UuidTable("meeting") {
     val tookPlace = bool("took_place").default(false)
     init {
         index(isUnique = true, columns = arrayOf(homeId, dateTime))
+        index(isUnique = true, columns = arrayOf(applicantId, dateTime))
     }
 }
 
