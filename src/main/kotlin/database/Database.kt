@@ -3,6 +3,7 @@ package org.burgas.database
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.*
+import org.burgas.dao.IdentityEntity
 import org.jetbrains.exposed.v1.core.*
 import org.jetbrains.exposed.v1.core.dao.id.UuidTable
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
@@ -10,8 +11,10 @@ import org.jetbrains.exposed.v1.datetime.datetime
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
+import org.mindrot.jbcrypt.BCrypt
 import redis.clients.jedis.Jedis
 import java.sql.Connection
+import kotlin.uuid.Uuid
 
 object DatabaseConnection {
 
@@ -167,4 +170,18 @@ suspend fun configureDatabase() = suspendTransaction(
         ImageTable, VideoTable, IdentityTable, AddressTable,
         HomeTable, HomeImageTable, HomeVideoTable, MeetingTable
     )
+    val burgasvvId = Uuid.parse("8a107c4f-8e76-4ea4-830a-56ccfca4bdcc")
+    IdentityEntity.findById(burgasvvId) ?: IdentityEntity.new(burgasvvId) {
+        this.authority = Authority.ADMIN
+        this.email = "burgasvv@gmail.com"
+        this.password = BCrypt.hashpw("burgasvv", BCrypt.gensalt())
+        this.status = true
+        this.phone = "+79124563678"
+        this.telegram = "burgasvvT"
+        this.whatsapp = "burgasW"
+        this.max = "burgvv"
+        this.firstname = "Бургас"
+        this.lastname = "Вячеслав"
+        this.patronymic = "Васильевич"
+    }
 }

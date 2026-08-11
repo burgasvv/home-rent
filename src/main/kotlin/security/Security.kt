@@ -1,17 +1,59 @@
 package org.burgas.security
 
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.plugins.cors.routing.CORS
-import io.ktor.server.plugins.csrf.CSRF
-import io.ktor.server.plugins.doublereceive.DoubleReceive
-import io.ktor.server.plugins.statuspages.StatusPages
-import io.ktor.server.response.respond
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.config.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.csrf.*
+import io.ktor.server.plugins.doublereceive.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.response.*
+import io.ktor.server.sessions.*
+import org.burgas.database.Authority
 import org.burgas.dto.ExceptionResponse
+import org.burgas.dto.IdentityPrincipal
 
 fun Application.configureSecurity() {
+
+    val config = ApplicationConfig("application.yaml")
+
+    authentication {
+        session<IdentityPrincipal>("auth-session") {
+            validate { it }
+            challenge {
+                val exceptionResponse = ExceptionResponse(
+                    status = HttpStatusCode.Unauthorized.description,
+                    code = HttpStatusCode.Unauthorized.value,
+                    message = "Not authenticated by auth-session"
+                )
+                call.respond(HttpStatusCode.Unauthorized, exceptionResponse)
+            }
+        }
+        session<IdentityPrincipal>("auth-session-admin") {
+            validate { if (it.authority == Authority.ADMIN) it else null }
+            challenge {
+                val exceptionResponse = ExceptionResponse(
+                    status = HttpStatusCode.Unauthorized.description,
+                    code = HttpStatusCode.Unauthorized.value,
+                    message = "Not authenticated by auth-session-admin"
+                )
+                call.respond(HttpStatusCode.Unauthorized, exceptionResponse)
+            }
+        }
+    }
+
+    install(Sessions) {
+        cookie<IdentityPrincipal>("IDENTITY_PRINCIPAL") {
+            cookie.path = "/"
+            cookie.httpOnly = true
+            cookie.secure = false
+            cookie.extensions["SameSite"] = "Lax"
+            transform(SessionTransportTransformerMessageAuthentication(
+                config.property("cookie.secret").getString().toByteArray(Charsets.UTF_8)
+            ))
+        }
+    }
 
     install(StatusPages) {
         exception<Throwable> { call, cause ->

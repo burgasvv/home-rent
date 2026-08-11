@@ -14,3 +14,6 @@ postgres:
 redis:
   host: '$REDIS_HOST:localhost'
   port: $REDIS_PORT:6000
+
+cookie:
+  secret: '1u4i5ot06o4ir85n5m3m6970vjf3k58h'

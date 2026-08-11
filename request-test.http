@@ -1,0 +1,26 @@
+
+
+
+### Security Requests
+
+
+
+###
+POST /api/v1/security/login
+Host: localhost:9000
+Origin: http://localhost:9000
+Content-Type: application/json
+
+{
+    "email": "burgasvv@gmail.com",
+    "password": "burgasvv"
+}
+
+###
+POST /api/v1/security/logout
+Host: localhost:9000
+Origin: http://localhost:9000
+
+###
+GET /api/v1/security/secured-data
+Host: localhost:9000
