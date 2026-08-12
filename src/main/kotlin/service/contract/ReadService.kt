@@ -1,4 +1,4 @@
-package org.burgas.service
+package org.burgas.service.contract
 
 import org.jetbrains.exposed.v1.dao.UuidEntity
 
