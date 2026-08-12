@@ -20,3 +20,8 @@ Content-Type: application/json
 POST /api/v1/security/logout
 Host: localhost:9000
 Origin: http://localhost:9000
+
+###
+GET /api/v1/security/authenticated
+Host: localhost:9000
+Accept: application/json

@@ -13,13 +13,17 @@ import org.burgas.database.DatabaseConnection
 import org.burgas.database.IdentityTable
 import org.burgas.dto.AuthRequest
 import org.burgas.dto.IdentityPrincipal
+import org.burgas.service.IdentityService
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
+import org.koin.ktor.ext.inject
 import org.mindrot.jbcrypt.BCrypt
 import java.util.*
 
 @OptIn(InternalAPI::class)
 fun Application.configureSecurityRouter() {
+
+    val identityService by inject<IdentityService>()
 
     intercept(ApplicationCallPipeline.Setup) {
         when(call.request.httpMethod) {
@@ -66,6 +70,12 @@ fun Application.configureSecurityRouter() {
                 post("/logout") {
                     call.sessions.clear(IdentityPrincipal::class)
                     call.respond(HttpStatusCode.OK, "You successfully logged out")
+                }
+
+                get("/authenticated") {
+                    val identityPrincipal = call.principal<IdentityPrincipal>()!!
+                    val identityResponse = identityService.findById(identityPrincipal.id)
+                    call.respond(HttpStatusCode.OK, identityResponse)
                 }
             }
         }
