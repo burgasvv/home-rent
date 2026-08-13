@@ -216,8 +216,8 @@ class HomeEntity(id: EntityID<Uuid>) : UuidEntity(id), Dao, Creator<HomeRequest>
         request.description?.takeIf { it.isNotEmpty() }.let { this.description = it }
         request.billingUnit!!.let { this.billingUnit = it }
         request.price!!.let { this.price = it }
-        request.lessorId!!.let { this.lessor = IdentityEntity[it] }
-        request.tenantId?.let { this.tenant = IdentityEntity[it] }
+        request.lessorUuid!!.let { this.lessor = IdentityEntity[it] }
+        request.tenantUuid?.let { this.tenant = IdentityEntity[it] }
     }
 
     override fun update(request: HomeRequest) {
@@ -229,8 +229,8 @@ class HomeEntity(id: EntityID<Uuid>) : UuidEntity(id), Dao, Creator<HomeRequest>
         request.description?.takeIf { it.isNotEmpty() }.let { this.description = it }
         request.billingUnit?.let { this.billingUnit = it }
         request.price?.let { this.price = it }
-        request.lessorId?.let { this.lessor = IdentityEntity[it] }
-        request.tenantId?.let { this.tenant = IdentityEntity[it] }
+        request.lessorUuid?.let { this.lessor = IdentityEntity[it] }
+        request.tenantUuid?.let { this.tenant = IdentityEntity[it] }
     }
 
     suspend fun toHomeDependencyWithTenant(): HomeDependencyWithTenant {
@@ -300,15 +300,15 @@ class MeetingEntity(id: EntityID<Uuid>) : UuidEntity(id), Dao, Creator<MeetingRe
     var tookPlace by MeetingTable.tookPlace
 
     override fun insert(request: MeetingRequest) {
-        request.homeId!!.let { this.home = HomeEntity[it] }
-        request.applicantId!!.let { this.applicant = IdentityEntity[it] }
+        request.homeUuid!!.let { this.home = HomeEntity[it] }
+        request.applicantUuid!!.let { this.applicant = IdentityEntity[it] }
         request.datetime!!.let { this.dateTime = it }
         request.tookPlace?.let { this.tookPlace = it }
     }
 
     override fun update(request: MeetingRequest) {
-        request.homeId?.let { this.home = HomeEntity[it] }
-        request.applicantId?.let { this.applicant = IdentityEntity[it] }
+        request.homeUuid?.let { this.home = HomeEntity[it] }
+        request.applicantUuid?.let { this.applicant = IdentityEntity[it] }
         request.datetime?.let { this.dateTime = it }
         request.tookPlace?.let { this.tookPlace = it }
     }

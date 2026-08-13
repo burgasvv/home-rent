@@ -53,6 +53,17 @@ data class VideoDependency(
 ) : Dependency
 
 @Serializable
+data class EntityFileRequest(
+    val entityId: String,
+    val filesIds: List<String>
+) {
+    val entityUuid: Uuid
+        get() = entityId.let { Uuid.parse(it) }
+    val fileUuids: List<Uuid>
+        get() = filesIds.map { Uuid.parse(it) }
+}
+
+@Serializable
 data class IdentityRequest(
     override val id: String?,
     val authority: Authority?,
@@ -133,11 +144,15 @@ data class HomeRequest(
     val description: String?,
     val billingUnit: BillingUnit?,
     val price: Double?,
-    val lessorId: Uuid?,
-    val tenantId: Uuid?
+    val lessorId: String?,
+    val tenantId: String?
 ) : Request {
     val uuid: Uuid?
         get() = id?.let { Uuid.parse(it) }
+    val lessorUuid: Uuid?
+        get() = lessorId?.let { Uuid.parse(it) }
+    val tenantUuid: Uuid?
+        get() = tenantId?.let { Uuid.parse(it) }
 }
 
 @Serializable
@@ -196,13 +211,17 @@ data class HomeResponse(
 @Serializable
 data class MeetingRequest(
     override val id: String?,
-    val homeId: Uuid?,
-    val applicantId: Uuid?,
+    val homeId: String?,
+    val applicantId: String?,
     val datetime: LocalDateTime?,
     val tookPlace: Boolean?
 ) : Request {
     val uuid: Uuid?
         get() = id?.let { Uuid.parse(it) }
+    val homeUuid: Uuid?
+        get() = homeId?.let { Uuid.parse(it) }
+    val applicantUuid: Uuid?
+        get() = applicantId?.let { Uuid.parse(it) }
 }
 
 @Serializable
