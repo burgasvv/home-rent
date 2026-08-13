@@ -223,7 +223,7 @@ class HomeEntity(id: EntityID<Uuid>) : UuidEntity(id), Dao, Creator<HomeRequest>
     override fun update(request: HomeRequest) {
         request.homeType?.let { this.homeType = it }
         request.address?.let {
-            this.address = AddressEntity.findByIdAndUpdate(it.id!!)
+            this.address = AddressEntity.findByIdAndUpdate(it.uuid!!)
             { addressEntity -> addressEntity.update(it) }!!
         }
         request.description?.takeIf { it.isNotEmpty() }.let { this.description = it }

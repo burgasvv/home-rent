@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import org.burgas.dao.IdentityEntity
+import org.burgas.database.Authority
 import org.burgas.database.DatabaseConnection
 import org.burgas.dto.IdentityRequest
 import org.burgas.dto.IdentityResponse
@@ -91,10 +92,25 @@ class IdentityService : CacheHandler<IdentityResponse>, CollectService<IdentityR
         identityResponse
     }
 
+    suspend fun createAdmin(identityRequest: IdentityRequest) = suspendTransaction(
+        db = DatabaseConnection.postgres, transactionIsolation = Connection.TRANSACTION_READ_COMMITTED
+    ) {
+        val identityEntity = IdentityEntity.new { this.insert(identityRequest) }.load(
+            IdentityEntity::image, IdentityEntity::meetings,
+            IdentityEntity::homesByLessor, IdentityEntity::homesByTenant
+        )
+        identityEntity.authority = Authority.ADMIN
+        val identityResponse = identityEntity.toResponse()
+        handleCache(identityResponse)
+        val identityKey = RedisKey.IDENTITY_KEY.format(identityResponse.id)
+        redis.set(identityKey, Json.encodeToString(identityResponse))
+        identityResponse
+    }
+
     override suspend fun update(request: IdentityRequest): IdentityResponse = suspendTransaction(
         db = DatabaseConnection.postgres, transactionIsolation = Connection.TRANSACTION_READ_COMMITTED
     ) {
-        val identityResponse = IdentityEntity.findByIdAndUpdate(request.id!!) { it.update(request) }!!.load(
+        val identityResponse = IdentityEntity.findByIdAndUpdate(request.uuid!!) { it.update(request) }!!.load(
             IdentityEntity::image, IdentityEntity::meetings,
             IdentityEntity::homesByLessor, IdentityEntity::homesByTenant
         ).toResponse()
@@ -116,7 +132,7 @@ class IdentityService : CacheHandler<IdentityResponse>, CollectService<IdentityR
     suspend fun changePassword(identityRequest: IdentityRequest) = suspendTransaction(
         db = DatabaseConnection.postgres, transactionIsolation = Connection.TRANSACTION_READ_COMMITTED
     ) {
-        val identityEntity = readEntity(identityRequest.id!!)
+        val identityEntity = readEntity(identityRequest.uuid!!)
         require(!BCrypt.checkpw(identityRequest.password!!, identityEntity.password)) {
             "Input and old passwords matched"
         }
@@ -129,7 +145,7 @@ class IdentityService : CacheHandler<IdentityResponse>, CollectService<IdentityR
     suspend fun changeStatus(identityRequest: IdentityRequest) = suspendTransaction(
         db = DatabaseConnection.postgres, transactionIsolation = Connection.TRANSACTION_READ_COMMITTED
     ) {
-        val identityEntity = readEntity(identityRequest.id!!)
+        val identityEntity = readEntity(identityRequest.uuid!!)
         require(identityEntity.status != identityRequest.status!!) { "Input and identity statuses matched" }
         identityRequest.status.let { identityEntity.status = it }
         handleCache(identityEntity.toResponse())

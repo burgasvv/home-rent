@@ -3,6 +3,7 @@ package org.burgas
 import io.ktor.server.application.Application
 import org.burgas.database.configureDatabase
 import org.burgas.koin.configureKoin
+import org.burgas.router.configureIdentityRouter
 import org.burgas.router.configureImageRouter
 import org.burgas.router.configureSecurityRouter
 import org.burgas.router.configureVideoRouter
@@ -21,4 +22,5 @@ suspend fun Application.modules() {
     configureSecurityRouter()
     configureImageRouter()
     configureVideoRouter()
+    configureIdentityRouter()
 }

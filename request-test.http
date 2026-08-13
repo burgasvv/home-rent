@@ -25,3 +25,47 @@ Origin: http://localhost:9000
 GET /api/v1/security/authenticated
 Host: localhost:9000
 Accept: application/json
+
+
+
+### Identity Requests
+
+
+
+###
+GET /api/v1/identities
+Host: localhost:9000
+Accept: application/json
+
+###
+GET /api/v1/identities/by-id?identityId=8a107c4f-8e76-4ea4-830a-56ccfca4bdcc
+Host: localhost:9000
+Accept: application/json
+
+###
+POST /api/v1/identities/create
+Host: localhost:9000
+Origin: http://localhost:9000
+Content-Type: application/json
+
+{
+    "email": "zagor@gmail.com",
+    "password": "zagor",
+    "phone": "+79456328574",
+    "firstname": "Загорулько",
+    "lastname": "Борис",
+    "patronymic": "Юрьевич"
+}
+
+###
+PUT /api/v1/identities/update
+Host: localhost:9000
+Origin: http://localhost:9000
+Content-Type: application/json
+
+{
+    "id": "777657f0-ff46-4d1b-8a2b-14af2946efd2",
+    "telegram": "zagorT",
+    "whatsapp": "zagorW",
+    "max": "zagorMax"
+}

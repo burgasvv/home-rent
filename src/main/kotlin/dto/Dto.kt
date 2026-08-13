@@ -8,7 +8,7 @@ import org.burgas.database.HomeType
 import kotlin.uuid.Uuid
 
 interface Request {
-    val id: Uuid?
+    val id: String?
 }
 
 interface Dependency {
@@ -54,7 +54,7 @@ data class VideoDependency(
 
 @Serializable
 data class IdentityRequest(
-    override val id: Uuid?,
+    override val id: String?,
     val authority: Authority?,
     val email: String?,
     val password: String?,
@@ -66,7 +66,10 @@ data class IdentityRequest(
     val firstname: String?,
     val lastname: String?,
     val patronymic: String?
-) : Request
+) : Request {
+    val uuid: Uuid?
+        get() = id?.let { Uuid.parse(it) }
+}
 
 @Serializable
 data class IdentityDependency(
@@ -101,13 +104,16 @@ data class IdentityResponse(
 
 @Serializable
 data class AddressRequest(
-    override val id: Uuid?,
+    override val id: String?,
     val country: String?,
     val city: String?,
     val street: String?,
     val building: String?,
     val apartment: String?
-) : Request
+) : Request {
+    val uuid: Uuid?
+        get() = id?.let { Uuid.parse(it) }
+}
 
 @Serializable
 data class AddressDependency(
@@ -121,7 +127,7 @@ data class AddressDependency(
 
 @Serializable
 data class HomeRequest(
-    override val id: Uuid?,
+    override val id: String?,
     val homeType: HomeType?,
     val address: AddressRequest?,
     val description: String?,
@@ -129,7 +135,10 @@ data class HomeRequest(
     val price: Double?,
     val lessorId: Uuid?,
     val tenantId: Uuid?
-) : Request
+) : Request {
+    val uuid: Uuid?
+        get() = id?.let { Uuid.parse(it) }
+}
 
 @Serializable
 data class HomeDependencyWithTenant(
@@ -186,12 +195,15 @@ data class HomeResponse(
 
 @Serializable
 data class MeetingRequest(
-    override val id: Uuid?,
+    override val id: String?,
     val homeId: Uuid?,
     val applicantId: Uuid?,
     val datetime: LocalDateTime?,
     val tookPlace: Boolean?
-) : Request
+) : Request {
+    val uuid: Uuid?
+        get() = id?.let { Uuid.parse(it) }
+}
 
 @Serializable
 data class MeetingDependencyInHome(
