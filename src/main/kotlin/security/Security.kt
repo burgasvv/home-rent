@@ -5,6 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.config.*
 import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.csrf.CSRF
 import io.ktor.server.plugins.doublereceive.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
@@ -80,5 +81,10 @@ fun Application.configureSecurity() {
         allowHeader(HttpHeaders.Origin)
         allowHeader(HttpHeaders.Accept)
         allowHeader(HttpHeaders.ContentType)
+    }
+
+    install(CSRF) {
+        allowOrigin("http://localhost:9000")
+        this.onFailure { reason -> respond(HttpStatusCode.BadRequest, reason) }
     }
 }

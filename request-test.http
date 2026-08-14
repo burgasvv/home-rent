@@ -8,6 +8,7 @@
 ###
 POST /api/v1/security/login
 Host: localhost:9000
+Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -17,6 +18,7 @@ Content-Type: application/json
 
 ###
 POST /api/v1/security/logout
+Origin: http://localhost:9000
 Host: localhost:9000
 
 ###
@@ -43,6 +45,7 @@ Accept: application/json
 ###
 POST /api/v1/identities/create
 Host: localhost:9000
+Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -57,6 +60,7 @@ Content-Type: application/json
 ###
 PUT /api/v1/identities/update
 Host: localhost:9000
+Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -87,6 +91,7 @@ Host: localhost:9000
 ###
 POST /api/v1/homes/create
 Host: localhost:9000
+Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -107,6 +112,7 @@ Content-Type: application/json
 ###
 PUT /api/v1/homes/update
 Host: localhost:9000
+Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -120,6 +126,7 @@ Content-Type: application/json
 ###
 PUT /api/v1/homes/rent
 Host: localhost:9000
+Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -130,3 +137,4 @@ Content-Type: application/json
 ###
 PUT /api/v1/homes/cancel?homeId=e0c14fa3-4840-427d-bde6-62a5d2ebfa05
 Host: localhost:9000
+Origin: http://localhost:9000
