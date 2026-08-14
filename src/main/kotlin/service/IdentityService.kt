@@ -34,6 +34,7 @@ class IdentityService : CacheHandler<IdentityResponse>, CollectService<IdentityR
     override suspend fun handleCache(response: IdentityResponse) {
         val identityKey = RedisKey.IDENTITY_KEY.format(response.id)
         if (redis.exists(identityKey)) redis.del(identityKey)
+
         response.homesByLessor.forEach {
             val homeKey = RedisKey.HOME_KEY.format(it.id)
             if (redis.exists(homeKey)) redis.del(homeKey)

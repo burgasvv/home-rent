@@ -16,4 +16,6 @@ redis:
   port: $REDIS_PORT:6000
 
 cookie:
-  secret: '1u4i5ot06o4ir85n5m3m6970vjf3k58h'
+  identity:
+    encryptionKey: '1y4ui6o0t8gjk58d'
+    signKey: 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4'

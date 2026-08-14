@@ -24,7 +24,6 @@ dependencies {
     implementation(ktorLibs.server.sessions)
     implementation(ktorLibs.server.statusPages)
     implementation(ktorLibs.server.cors)
-    implementation(ktorLibs.server.csrf)
     implementation(ktorLibs.server.doubleReceive)
     implementation(libs.logback.classic)
     implementation("org.jetbrains.exposed:exposed-core:1.3.1")

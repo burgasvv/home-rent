@@ -5,7 +5,6 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.config.*
 import io.ktor.server.plugins.cors.routing.*
-import io.ktor.server.plugins.csrf.*
 import io.ktor.server.plugins.doublereceive.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
@@ -49,9 +48,12 @@ fun Application.configureSecurity() {
             cookie.httpOnly = true
             cookie.secure = false
             cookie.extensions["SameSite"] = "Lax"
-            transform(SessionTransportTransformerMessageAuthentication(
-                config.property("cookie.secret").getString().toByteArray(Charsets.UTF_8)
-            ))
+            transform(
+                SessionTransportTransformerEncrypt(
+                    config.property("cookie.identity.encryptionKey").getString().toByteArray(),
+                    config.property("cookie.identity.signKey").getString().toByteArray()
+                )
+            )
         }
     }
 
@@ -78,15 +80,5 @@ fun Application.configureSecurity() {
         allowHeader(HttpHeaders.Origin)
         allowHeader(HttpHeaders.Accept)
         allowHeader(HttpHeaders.ContentType)
-        allowHeader("X-CSRF-Token")
-
-        allowXHttpMethodOverride()
-        allowHost("localhost:9000", listOf("http", "https"))
-    }
-
-    install(CSRF) {
-        allowOrigin("http://localhost:9000")
-        checkHeader("X-CSRF-Token")
-        onFailure { reason -> respond(HttpStatusCode.BadRequest, reason) }
     }
 }

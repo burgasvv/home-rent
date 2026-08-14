@@ -8,7 +8,6 @@
 ###
 POST /api/v1/security/login
 Host: localhost:9000
-Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -19,7 +18,6 @@ Content-Type: application/json
 ###
 POST /api/v1/security/logout
 Host: localhost:9000
-Origin: http://localhost:9000
 
 ###
 GET /api/v1/security/authenticated
@@ -45,7 +43,6 @@ Accept: application/json
 ###
 POST /api/v1/identities/create
 Host: localhost:9000
-Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -60,7 +57,6 @@ Content-Type: application/json
 ###
 PUT /api/v1/identities/update
 Host: localhost:9000
-Origin: http://localhost:9000
 Content-Type: application/json
 
 {
@@ -69,3 +65,68 @@ Content-Type: application/json
     "whatsapp": "zagorW",
     "max": "zagorMax"
 }
+
+
+
+### Home Requests
+
+
+
+###
+GET /api/v1/homes
+Host: localhost:9000
+
+###
+GET /api/v1/homes/by-free
+Host: localhost:9000
+
+###
+GET /api/v1/homes/by-id?homeId=e0c14fa3-4840-427d-bde6-62a5d2ebfa05
+Host: localhost:9000
+
+###
+POST /api/v1/homes/create
+Host: localhost:9000
+Content-Type: application/json
+
+{
+    "homeType": "APARTMENT",
+    "address": {
+        "country": "Россия",
+        "city": "Новосибирск",
+        "street": "Российская",
+        "building": "30/4",
+        "apartment": "12"
+    },
+    "description": "Описание квартиры",
+    "billingUnit": "MONTHLY",
+    "price": 25500.0,
+    "lessorId": "8a107c4f-8e76-4ea4-830a-56ccfca4bdcc"
+}
+
+###
+PUT /api/v1/homes/update
+Host: localhost:9000
+Content-Type: application/json
+
+{
+    "id": "e0c14fa3-4840-427d-bde6-62a5d2ebfa05",
+    "address": {
+        "id": "eeab13fa-dd2f-40e0-9abb-32abc16a860d",
+        "apartment": "56B"
+    }
+}
+
+###
+PUT /api/v1/homes/rent
+Host: localhost:9000
+Content-Type: application/json
+
+{
+    "id": "e0c14fa3-4840-427d-bde6-62a5d2ebfa05",
+    "tenantId": "777657f0-ff46-4d1b-8a2b-14af2946efd2"
+}
+
+###
+PUT /api/v1/homes/cancel?homeId=e0c14fa3-4840-427d-bde6-62a5d2ebfa05
+Host: localhost:9000
