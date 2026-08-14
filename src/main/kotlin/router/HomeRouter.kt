@@ -41,11 +41,15 @@ fun Application.configureHomeRouter() {
                     }
                     suspendTransaction(db = DatabaseConnection.postgres, readOnly = true) {
                         val homeEntity = HomeEntity[Uuid.parse(call.parameters["homeId"]!!)]
-                        require(
-                            identityPrincipal.id == homeEntity.lessor.id.value ||
-                                    identityPrincipal.id == homeEntity.tenant?.id?.value
-                        ) {
-                            "Not authorized intercept home by lessor id"
+                        if (homeEntity.tenant != null) {
+                            require(
+                                identityPrincipal.id == homeEntity.lessor.id.value ||
+                                        identityPrincipal.id == homeEntity.tenant!!.id.value
+                            ) {
+                                "Not authorized intercept home by lessor id"
+                            }
+                        } else {
+                            return@suspendTransaction
                         }
                     }
                 }

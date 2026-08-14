@@ -12,8 +12,8 @@ Origin: http://localhost:9000
 Content-Type: application/json
 
 {
-    "email": "burgasvv@gmail.com",
-    "password": "burgasvv"
+    "email": "zagor@gmail.com",
+    "password": "zagor"
 }
 
 ###
