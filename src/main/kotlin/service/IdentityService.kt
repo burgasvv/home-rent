@@ -157,7 +157,7 @@ class IdentityService : CacheHandler<IdentityResponse>, CollectService<IdentityR
     ) {
         val fileItem = multiPartData.asFlow().filterIsInstance<PartData.FileItem>().first()
         val identityEntity = readEntity(identityId)
-        require(identityEntity.image != null) { "Identity image already set" }
+        require(identityEntity.image == null) { "Identity image already set" }
         identityEntity.image = imageService.upload(fileItem)
         handleCache(identityEntity.toResponse())
     }

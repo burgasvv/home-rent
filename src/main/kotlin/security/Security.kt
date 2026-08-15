@@ -85,6 +85,6 @@ fun Application.configureSecurity() {
 
     install(CSRF) {
         allowOrigin("http://localhost:9000")
-        this.onFailure { reason -> respond(HttpStatusCode.BadRequest, reason) }
+        onFailure { reason -> respond(HttpStatusCode.BadRequest, reason) }
     }
 }

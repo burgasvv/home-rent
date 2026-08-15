@@ -155,7 +155,7 @@ class HomeService : CacheHandler<HomeResponse>, CollectService<HomeResponse>, Re
     ) {
         val fileItem = multiPartData.asFlow().filterIsInstance<PartData.FileItem>().first()
         val homeEntity = readEntity(homeId)
-        require(homeEntity.image != null) { "Home image already set" }
+        require(homeEntity.image == null) { "Home image already set" }
         homeEntity.image = imageService.upload(fileItem)
         handleCache(homeEntity.toResponse())
     }
@@ -175,6 +175,7 @@ class HomeService : CacheHandler<HomeResponse>, CollectService<HomeResponse>, Re
         val homeEntity = readEntity(homeId)
         val imageEntities = fileItems.map { imageService.upload(it) }
         homeEntity.images = SizedCollection(homeEntity.images + imageEntities)
+        handleCache(homeEntity.toResponse())
     }
 
     suspend fun removeImages(entityFileRequest: EntityFileRequest) = suspendTransaction(
@@ -192,6 +193,7 @@ class HomeService : CacheHandler<HomeResponse>, CollectService<HomeResponse>, Re
         val homeEntity = readEntity(homeId)
         val videoEntities = fileItems.map { videoService.upload(it) }
         homeEntity.videos = SizedCollection(homeEntity.videos + videoEntities)
+        handleCache(homeEntity.toResponse())
     }
 
     suspend fun removeVideos(entityFileRequest: EntityFileRequest) = suspendTransaction(
