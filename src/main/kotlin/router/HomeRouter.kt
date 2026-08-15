@@ -108,6 +108,10 @@ fun Application.configureHomeRouter() {
 
         route("/api/v1/homes") {
 
+            get("/by-free") {
+                call.respond(HttpStatusCode.OK, homeService.findAllFree())
+            }
+
             authenticate("auth-session-admin") {
 
                 get {
@@ -116,10 +120,6 @@ fun Application.configureHomeRouter() {
             }
 
             authenticate("auth-session") {
-
-                get("/by-free") {
-                    call.respond(HttpStatusCode.OK, homeService.findAllFree())
-                }
 
                 get("/by-id") {
                     val homeId = Uuid.parse(call.parameters["homeId"]!!)
