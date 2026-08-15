@@ -2,6 +2,7 @@ package org.burgas.dao
 
 import io.ktor.http.content.*
 import io.ktor.utils.io.jvm.javaio.*
+import kotlinx.datetime.toJavaLocalDateTime
 import org.burgas.database.*
 import org.burgas.dto.*
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
@@ -9,6 +10,7 @@ import org.jetbrains.exposed.v1.core.statements.api.ExposedBlob
 import org.jetbrains.exposed.v1.dao.UuidEntity
 import org.jetbrains.exposed.v1.dao.UuidEntityClass
 import org.mindrot.jbcrypt.BCrypt
+import java.time.LocalDateTime
 import kotlin.uuid.Uuid
 
 interface File
@@ -35,7 +37,8 @@ interface ResponseMapper<out R : Response> {
     suspend fun toResponse(): R
 }
 
-class ImageEntity(id: EntityID<Uuid>) : UuidEntity(id), File, Uploader<PartData.FileItem>, DependencyMapper<ImageDependency> {
+class ImageEntity(id: EntityID<Uuid>) : UuidEntity(id), File, Uploader<PartData.FileItem>,
+    DependencyMapper<ImageDependency> {
     companion object : UuidEntityClass<ImageEntity>(ImageTable)
 
     var name by ImageTable.name
@@ -57,7 +60,8 @@ class ImageEntity(id: EntityID<Uuid>) : UuidEntity(id), File, Uploader<PartData.
     }
 }
 
-class VideoEntity(id: EntityID<Uuid>) : UuidEntity(id), File, Uploader<PartData.FileItem>, DependencyMapper<VideoDependency> {
+class VideoEntity(id: EntityID<Uuid>) : UuidEntity(id), File, Uploader<PartData.FileItem>,
+    DependencyMapper<VideoDependency> {
     companion object : UuidEntityClass<VideoEntity>(VideoTable)
 
     var name by VideoTable.name
@@ -291,7 +295,8 @@ class HomeEntity(id: EntityID<Uuid>) : UuidEntity(id), Dao, Creator<HomeRequest>
     }
 }
 
-class MeetingEntity(id: EntityID<Uuid>) : UuidEntity(id), Dao, Creator<MeetingRequest>, Modifier<MeetingRequest>, ResponseMapper<MeetingResponse> {
+class MeetingEntity(id: EntityID<Uuid>) : UuidEntity(id), Dao, Creator<MeetingRequest>, Modifier<MeetingRequest>,
+    ResponseMapper<MeetingResponse> {
     companion object : UuidEntityClass<MeetingEntity>(MeetingTable)
 
     var home by HomeEntity.referencedOn(MeetingTable.homeId)
@@ -302,7 +307,7 @@ class MeetingEntity(id: EntityID<Uuid>) : UuidEntity(id), Dao, Creator<MeetingRe
     override fun insert(request: MeetingRequest) {
         request.homeUuid!!.let { this.home = HomeEntity[it] }
         request.applicantUuid!!.let { this.applicant = IdentityEntity[it] }
-        request.datetime!!.let { this.dateTime = it }
+        request.datetime!!.takeIf { it.toJavaLocalDateTime().isAfter(LocalDateTime.now()) }!!.let { this.dateTime = it }
         request.tookPlace?.let { this.tookPlace = it }
     }
 

@@ -6,6 +6,7 @@ import org.burgas.koin.configureKoin
 import org.burgas.router.configureHomeRouter
 import org.burgas.router.configureIdentityRouter
 import org.burgas.router.configureImageRouter
+import org.burgas.router.configureMeetingRouter
 import org.burgas.router.configureSecurityRouter
 import org.burgas.router.configureVideoRouter
 import org.burgas.security.configureSecurity
@@ -25,4 +26,5 @@ suspend fun Application.modules() {
     configureVideoRouter()
     configureIdentityRouter()
     configureHomeRouter()
+    configureMeetingRouter()
 }
