@@ -11,6 +11,7 @@ import org.burgas.router.configureSecurityRouter
 import org.burgas.router.configureVideoRouter
 import org.burgas.security.configureSecurity
 import org.burgas.serialization.configureSerialization
+import org.burgas.swagger.configureSwagger
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
@@ -21,6 +22,7 @@ suspend fun Application.modules() {
     configureSerialization()
     configureSecurity()
     configureKoin()
+    configureSwagger()
     configureSecurityRouter()
     configureImageRouter()
     configureVideoRouter()

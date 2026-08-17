@@ -1,0 +1,1149 @@
+
+openapi: "3.1.0"
+info:
+  title: "home_rent API"
+  description: "home_rent API"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:9000"
+paths:
+  /api/v1/security/authenticated:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/IdentityResponse"
+  /api/v1/security/login:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+                Example#2:
+                  value: "You already logged in"
+        "401":
+          description: "Unauthorized"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Identity not found and not authenticated"
+  /api/v1/security/logout:
+    post:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "You successfully logged out"
+  /api/v1/images/by-id:
+    get:
+      description: ""
+      parameters:
+        - name: "imageId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+                format: "byte"
+  /api/v1/videos/by-id:
+    get:
+      description: ""
+      parameters:
+        - name: "videoId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+                format: "byte"
+  /api/v1/identities:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/IdentityResponse"
+  /api/v1/identities/by-id:
+    get:
+      description: ""
+      parameters:
+        - name: "identityId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/IdentityResponse"
+  /api/v1/identities/change-password:
+    put:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IdentityRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/identities/change-status:
+    put:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IdentityRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/identities/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IdentityRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/IdentityResponse"
+  /api/v1/identities/create-admin:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IdentityRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/IdentityResponse"
+  /api/v1/identities/delete:
+    post:
+      description: ""
+      parameters:
+        - name: "identityId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "302":
+          description: "Found <br> Redirect"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "/api/v1/security/logout"
+  /api/v1/identities/remove-image:
+    delete:
+      description: ""
+      parameters:
+        - name: "identityId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/identities/update:
+    put:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IdentityRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/IdentityResponse"
+  /api/v1/identities/upload-image:
+    post:
+      description: ""
+      parameters:
+        - name: "identityId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: Описание для загружаемого файла.
+                file:
+                  type: string
+                  format: binary
+                  description: Сам файл (картинка).
+              required:
+                - image
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/HomeResponse"
+  /api/v1/homes/by-free:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/HomeResponse"
+  /api/v1/homes/by-id:
+    get:
+      description: ""
+      parameters:
+        - name: "homeId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HomeResponse"
+  /api/v1/homes/cancel:
+    put:
+      description: ""
+      parameters:
+        - name: "homeId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HomeRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HomeResponse"
+  /api/v1/homes/delete:
+    delete:
+      description: ""
+      parameters:
+        - name: "homeId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes/remove-images:
+    delete:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntityFileRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes/remove-preview-image:
+    delete:
+      description: ""
+      parameters:
+        - name: "homeId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes/remove-videos:
+    delete:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntityFileRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes/rent:
+    put:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HomeRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes/update:
+    put:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HomeRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HomeResponse"
+  /api/v1/homes/upload-images:
+    post:
+      description: ""
+      parameters:
+        - name: "homeId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                tags:
+                  type: string
+                  description: Теги или категории для группы файлов.
+                files:
+                  type: array
+                  description: Список загружаемых изображений.
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - images
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes/upload-preview-image:
+    post:
+      description: ""
+      parameters:
+        - name: "homeId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: Описание для загружаемого файла.
+                file:
+                  type: string
+                  format: binary
+                  description: Сам файл (картинка).
+              required:
+                - image
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/homes/upload-videos:
+    post:
+      description: ""
+      parameters:
+        - name: "homeId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                tags:
+                  type: string
+                  description: Теги или категории для группы файлов.
+                files:
+                  type: array
+                  description: Список загружаемых видео-файлов.
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - videos
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/meetings/by-id:
+    get:
+      description: ""
+      parameters:
+        - name: "meetingId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MeetingResponse"
+  /api/v1/meetings/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeetingRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MeetingResponse"
+  /api/v1/meetings/delete:
+    delete:
+      description: ""
+      parameters:
+        - name: "meetingId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/v1/meetings/update:
+    put:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeetingRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MeetingResponse"
+components:
+  parameters:
+    OriginHeader:
+      name: Origin
+      in: header
+      required: false
+      description: Домен, с которого отправляется запрос (передается браузером автоматически)
+      schema:
+        type: string
+        example: http://localhost:9000
+  schemas:
+    ExceptionResponse:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+        code:
+          type: "integer"
+          format: "int32"
+        message:
+          type: "string"
+          nullable: true
+      required:
+        - "status"
+        - "code"
+    Uuid:
+      type: "object"
+      properties:
+        mostSignificantBits:
+          type: "integer"
+          format: "int64"
+        leastSignificantBits:
+          type: "integer"
+          format: "int64"
+      required:
+        - "mostSignificantBits"
+        - "leastSignificantBits"
+    ImageDependency:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        name:
+          type: "string"
+          nullable: true
+        contentType:
+          type: "string"
+      required:
+        - "id"
+        - "contentType"
+    AddressDependency:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        country:
+          type: "string"
+        city:
+          type: "string"
+        street:
+          type: "string"
+        building:
+          type: "string"
+        apartment:
+          type: "string"
+          nullable: true
+      required:
+        - "id"
+        - "country"
+        - "city"
+        - "street"
+        - "building"
+    IdentityDependency:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        email:
+          type: "string"
+        phone:
+          type: "string"
+        telegram:
+          type: "string"
+          nullable: true
+        whatsapp:
+          type: "string"
+          nullable: true
+        max:
+          type: "string"
+          nullable: true
+        firstname:
+          type: "string"
+        lastname:
+          type: "string"
+        patronymic:
+          type: "string"
+        image:
+          nullable: true
+          $ref: "#/components/schemas/ImageDependency"
+      required:
+        - "id"
+        - "email"
+        - "phone"
+        - "firstname"
+        - "lastname"
+        - "patronymic"
+    HomeDependencyWithTenant:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        homeType:
+          type: "string"
+          enum:
+            - "APARTMENT"
+            - "HOUSE"
+            - "CONDO"
+            - "TOWNHOUSE"
+            - "MANOR"
+        address:
+          $ref: "#/components/schemas/AddressDependency"
+        description:
+          type: "string"
+          nullable: true
+        billingUnit:
+          type: "string"
+          enum:
+            - "HOURLY"
+            - "DAILY"
+            - "MONTHLY"
+            - "YEARLY"
+        price:
+          type: "number"
+          format: "double"
+        tenant:
+          nullable: true
+          $ref: "#/components/schemas/IdentityDependency"
+        image:
+          nullable: true
+          $ref: "#/components/schemas/ImageDependency"
+      required:
+        - "id"
+        - "homeType"
+        - "address"
+        - "billingUnit"
+        - "price"
+    HomeDependencyWithLessor:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        homeType:
+          type: "string"
+          enum:
+            - "APARTMENT"
+            - "HOUSE"
+            - "CONDO"
+            - "TOWNHOUSE"
+            - "MANOR"
+        address:
+          $ref: "#/components/schemas/AddressDependency"
+        description:
+          type: "string"
+          nullable: true
+        billingUnit:
+          type: "string"
+          enum:
+            - "HOURLY"
+            - "DAILY"
+            - "MONTHLY"
+            - "YEARLY"
+        price:
+          type: "number"
+          format: "double"
+        lessor:
+          $ref: "#/components/schemas/IdentityDependency"
+        image:
+          nullable: true
+          $ref: "#/components/schemas/ImageDependency"
+      required:
+        - "id"
+        - "homeType"
+        - "address"
+        - "billingUnit"
+        - "price"
+        - "lessor"
+    HomeDependency:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        homeType:
+          type: "string"
+          enum:
+            - "APARTMENT"
+            - "HOUSE"
+            - "CONDO"
+            - "TOWNHOUSE"
+            - "MANOR"
+        address:
+          $ref: "#/components/schemas/AddressDependency"
+        description:
+          type: "string"
+          nullable: true
+        billingUnit:
+          type: "string"
+          enum:
+            - "HOURLY"
+            - "DAILY"
+            - "MONTHLY"
+            - "YEARLY"
+        price:
+          type: "number"
+          format: "double"
+        lessor:
+          $ref: "#/components/schemas/IdentityDependency"
+        tenant:
+          nullable: true
+          $ref: "#/components/schemas/IdentityDependency"
+        image:
+          nullable: true
+          $ref: "#/components/schemas/ImageDependency"
+      required:
+        - "id"
+        - "homeType"
+        - "address"
+        - "billingUnit"
+        - "price"
+        - "lessor"
+    MeetingDependencyInApplicant:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        home:
+          $ref: "#/components/schemas/HomeDependency"
+        datetime:
+          type: "string"
+          format: "date-time"
+        tookPlace:
+          type: "boolean"
+      required:
+        - "id"
+        - "home"
+        - "datetime"
+        - "tookPlace"
+    IdentityResponse:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        email:
+          type: "string"
+        phone:
+          type: "string"
+        telegram:
+          type: "string"
+          nullable: true
+        whatsapp:
+          type: "string"
+          nullable: true
+        max:
+          type: "string"
+          nullable: true
+        firstname:
+          type: "string"
+        lastname:
+          type: "string"
+        patronymic:
+          type: "string"
+        image:
+          nullable: true
+          $ref: "#/components/schemas/ImageDependency"
+        homesByLessor:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/HomeDependencyWithTenant"
+        homesByTenant:
+          type: "array"
+          nullable: true
+          items:
+            $ref: "#/components/schemas/HomeDependencyWithLessor"
+        meetings:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/MeetingDependencyInApplicant"
+      required:
+        - "id"
+        - "email"
+        - "phone"
+        - "firstname"
+        - "lastname"
+        - "patronymic"
+        - "homesByLessor"
+        - "meetings"
+    AuthRequest:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+      required:
+        - "email"
+        - "password"
+    IdentityRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          nullable: true
+        authority:
+          type: "string"
+          nullable: true
+          enum:
+            - "ADMIN"
+            - "USER"
+        email:
+          type: "string"
+          nullable: true
+        password:
+          type: "string"
+          nullable: true
+        status:
+          type: "boolean"
+          nullable: true
+        phone:
+          type: "string"
+          nullable: true
+        telegram:
+          type: "string"
+          nullable: true
+        whatsapp:
+          type: "string"
+          nullable: true
+        max:
+          type: "string"
+          nullable: true
+        firstname:
+          type: "string"
+          nullable: true
+        lastname:
+          type: "string"
+          nullable: true
+        patronymic:
+          type: "string"
+          nullable: true
+    VideoDependency:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        name:
+          type: "string"
+          nullable: true
+        contentType:
+          type: "string"
+      required:
+        - "id"
+        - "contentType"
+    MeetingDependencyInHome:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        applicant:
+          $ref: "#/components/schemas/IdentityDependency"
+        datetime:
+          type: "string"
+          format: "date-time"
+        tookPlace:
+          type: "boolean"
+      required:
+        - "id"
+        - "applicant"
+        - "datetime"
+        - "tookPlace"
+    HomeResponse:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        homeType:
+          type: "string"
+          enum:
+            - "APARTMENT"
+            - "HOUSE"
+            - "CONDO"
+            - "TOWNHOUSE"
+            - "MANOR"
+        address:
+          $ref: "#/components/schemas/AddressDependency"
+        description:
+          type: "string"
+          nullable: true
+        billingUnit:
+          type: "string"
+          enum:
+            - "HOURLY"
+            - "DAILY"
+            - "MONTHLY"
+            - "YEARLY"
+        price:
+          type: "number"
+          format: "double"
+        lessor:
+          $ref: "#/components/schemas/IdentityDependency"
+        tenant:
+          nullable: true
+          $ref: "#/components/schemas/IdentityDependency"
+        image:
+          nullable: true
+          $ref: "#/components/schemas/ImageDependency"
+        images:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ImageDependency"
+        videos:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/VideoDependency"
+        meetings:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/MeetingDependencyInHome"
+      required:
+        - "id"
+        - "homeType"
+        - "address"
+        - "billingUnit"
+        - "price"
+        - "lessor"
+        - "images"
+        - "videos"
+        - "meetings"
+    AddressRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          nullable: true
+        country:
+          type: "string"
+          nullable: true
+        city:
+          type: "string"
+          nullable: true
+        street:
+          type: "string"
+          nullable: true
+        building:
+          type: "string"
+          nullable: true
+        apartment:
+          type: "string"
+          nullable: true
+    HomeRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          nullable: true
+        homeType:
+          type: "string"
+          nullable: true
+          enum:
+            - "APARTMENT"
+            - "HOUSE"
+            - "CONDO"
+            - "TOWNHOUSE"
+            - "MANOR"
+        address:
+          nullable: true
+          $ref: "#/components/schemas/AddressRequest"
+        description:
+          type: "string"
+          nullable: true
+        billingUnit:
+          type: "string"
+          nullable: true
+          enum:
+            - "HOURLY"
+            - "DAILY"
+            - "MONTHLY"
+            - "YEARLY"
+        price:
+          type: "number"
+          format: "double"
+          nullable: true
+        lessorId:
+          type: "string"
+          nullable: true
+        tenantId:
+          type: "string"
+          nullable: true
+    EntityFileRequest:
+      type: "object"
+      properties:
+        entityId:
+          type: "string"
+        filesIds:
+          type: "array"
+          items:
+            type: "string"
+      required:
+        - "entityId"
+        - "filesIds"
+    MeetingResponse:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Uuid"
+        home:
+          $ref: "#/components/schemas/HomeDependency"
+        applicant:
+          $ref: "#/components/schemas/IdentityDependency"
+        datetime:
+          type: "string"
+          format: "date-time"
+        tookPlace:
+          type: "boolean"
+      required:
+        - "id"
+        - "home"
+        - "applicant"
+        - "datetime"
+        - "tookPlace"
+    MeetingRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          nullable: true
+        homeId:
+          type: "string"
+          nullable: true
+        applicantId:
+          type: "string"
+          nullable: true
+        datetime:
+          type: "string"
+          format: "date-time"
+          nullable: true
+        tookPlace:
+          type: "boolean"
+          nullable: true

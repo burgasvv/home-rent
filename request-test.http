@@ -138,3 +138,36 @@ Content-Type: application/json
 PUT /api/v1/homes/cancel?homeId=e0c14fa3-4840-427d-bde6-62a5d2ebfa05
 Host: localhost:9000
 Origin: http://localhost:9000
+
+
+
+### Meeting Requests
+
+
+
+###
+GET /api/v1/meetings/by-id?meetingId=92fe069c-1665-4de5-9e57-0903271d203a
+Host: localhost:9000
+
+###
+POST /api/v1/meetings/create
+Host: localhost:9000
+Origin: http://localhost:9000
+Content-Type: application/json
+
+{
+    "homeId": "e0c14fa3-4840-427d-bde6-62a5d2ebfa05",
+    "applicantId": "777657f0-ff46-4d1b-8a2b-14af2946efd2",
+    "datetime": "2026-08-20T15:00"
+}
+
+###
+PUT /api/v1/meetings/update
+Host: localhost:9000
+Origin: http://localhost:9000
+Content-Type: application/json
+
+{
+    "id": "92fe069c-1665-4de5-9e57-0903271d203a",
+    "datetime": "2026-08-20T17:00"
+}

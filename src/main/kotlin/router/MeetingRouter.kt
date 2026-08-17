@@ -59,6 +59,7 @@ fun Application.configureMeetingRouter() {
                     val meetingRequest = call.receive<MeetingRequest>()
                     suspendTransaction(db = DatabaseConnection.postgres, readOnly = true) {
                         val homeEntity = HomeEntity[meetingRequest.homeUuid!!]
+
                         require(identityPrincipal.id == homeEntity.lessor.id.value) {
                             "Not authorized intercept meeting create by MeetingRequest body"
                         }
@@ -72,6 +73,7 @@ fun Application.configureMeetingRouter() {
                     val meetingRequest = call.receive<MeetingRequest>()
                     suspendTransaction(db = DatabaseConnection.postgres, readOnly = true) {
                         val meetingEntity = MeetingEntity[meetingRequest.uuid!!]
+
                         require(identityPrincipal.id == meetingEntity.home.lessor.id.value) {
                             "Not authorized intercept meeting update by MeetingRequest body"
                         }
