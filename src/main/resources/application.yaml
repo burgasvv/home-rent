@@ -14,6 +14,8 @@ postgres:
 redis:
   host: '$REDIS_HOST:localhost'
   port: $REDIS_PORT:6000
+kafka:
+  bootstrap: '$KAFKA_BOOTSTRAP:localhost:9092'
 
 cookie:
   identity:

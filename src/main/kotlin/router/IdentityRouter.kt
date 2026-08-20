@@ -6,10 +6,15 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.json.Json
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.burgas.dao.IdentityEntity
 import org.burgas.database.DatabaseConnection
 import org.burgas.dto.IdentityPrincipal
 import org.burgas.dto.IdentityRequest
+import org.burgas.kafka.KafkaConfig
+import org.burgas.kafka.KafkaTopics
 import org.burgas.service.IdentityService
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import org.koin.ktor.ext.inject
@@ -18,6 +23,7 @@ import kotlin.uuid.Uuid
 fun Application.configureIdentityRouter() {
 
     val identityService by inject<IdentityService>()
+    val kafkaProducer = KafkaProducer<String, String>(KafkaConfig.getProducerProps())
 
     val identityAuthenticationInterceptPlugin = createRouteScopedPlugin("IdentityAuthenticationInterceptPlugin") {
         on(AuthenticationChecked) { call ->
@@ -70,6 +76,8 @@ fun Application.configureIdentityRouter() {
                 post("/create") {
                     val identityRequest = call.receive<IdentityRequest>()
                     val identityResponse = identityService.create(identityRequest)
+                    val producerRecord = ProducerRecord(KafkaTopics.identityTopic.name(), "create-identity", Json.encodeToString(identityResponse))
+                    kafkaProducer.send(producerRecord)
                     call.respond(HttpStatusCode.OK, identityResponse)
                 }
             }

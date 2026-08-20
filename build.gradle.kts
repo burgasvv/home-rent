@@ -41,6 +41,7 @@ dependencies {
     implementation("io.insert-koin:koin-logger-slf4j:4.2.2")
     implementation("io.ktor:ktor-server-swagger:3.5.0")
     implementation("io.ktor:ktor-server-routing-openapi:3.5.0")
+    implementation("org.apache.kafka:kafka-clients:4.3.1")
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)

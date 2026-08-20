@@ -14,6 +14,7 @@
 + Routing
 + Serialization
 + Redis
++ Kafka
 + Swagger
 
 ## Описание
