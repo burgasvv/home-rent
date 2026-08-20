@@ -58,6 +58,21 @@ Content-Type: application/json
 }
 
 ###
+POST /api/v1/identities/create
+Host: localhost:9000
+Origin: http://localhost:9000
+Content-Type: application/json
+
+{
+    "email": "osipkin@gmail.com",
+    "password": "osipkin",
+    "phone": "+79563247896",
+    "firstname": "Осипкин",
+    "lastname": "Алексей",
+    "patronymic": "Олегович"
+}
+
+###
 PUT /api/v1/identities/update
 Host: localhost:9000
 Origin: http://localhost:9000

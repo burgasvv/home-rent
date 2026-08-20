@@ -15,6 +15,9 @@ redis:
   host: '$REDIS_HOST:localhost'
   port: $REDIS_PORT:6000
 
+kafka:
+  bootstrap: '$KAFKA_BOOTSTRAP:localhost:9092'
+
 cookie:
   identity:
     encryptionKey: '1y4ui6o0t8gjk58d'

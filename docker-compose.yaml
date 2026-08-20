@@ -25,6 +25,26 @@ services:
     volumes:
       - redis-data:/var/lib/redis
 
+  home-rent:
+    container_name: home-rent
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - my-network
+    ports:
+      - "9000:9000"
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/home-rent-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
 networks:
   my-network:
     external: true

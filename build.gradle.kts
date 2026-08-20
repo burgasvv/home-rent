@@ -15,6 +15,7 @@ application {
 kotlin {
     jvmToolchain(25)
 }
+
 dependencies {
     implementation(ktorLibs.serialization.kotlinx.json)
     implementation(ktorLibs.server.config.yaml)
